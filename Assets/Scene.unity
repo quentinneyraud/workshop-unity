@@ -285,6 +285,10 @@ GameObject:
   m_Component:
   - 4: {fileID: 668939249}
   - 212: {fileID: 668939248}
+  - 68: {fileID: 668939250}
+  - 61: {fileID: 668939251}
+  - 61: {fileID: 668939253}
+  - 61: {fileID: 668939252}
   m_Layer: 0
   m_Name: mb
   m_TagString: Untagged
@@ -338,6 +342,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!68 &668939250
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 668939247}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  m_Points:
+  - {x: -16.473507, y: -1.5801852}
+  - {x: -6.759441, y: -1.5611918}
+  - {x: -6.7857404, y: -1.2136734}
+  - {x: -1.2951761, y: -1.1564631}
+  - {x: -0.52750146, y: -0.7864692}
+  - {x: 0.147143, y: -0.6052058}
+  - {x: 0.6793071, y: -0.5276089}
+  - {x: 1.325887, y: -0.5060191}
+  - {x: 2.080792, y: -0.60184216}
+  - {x: 2.6474106, y: -0.7214668}
+  - {x: 8.01684, y: -0.7971723}
+  - {x: 8.180565, y: -1.2750704}
+  - {x: 16.465826, y: -1.2984011}
+--- !u!61 &668939251
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 668939247}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: -5.4216013, y: -0.3484695}
+  serializedVersion: 2
+  m_Size: {x: 1.9533443, y: 0.20776463}
+--- !u!61 &668939252
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 668939247}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 17.004368, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1.0822201, y: 4.5}
+--- !u!61 &668939253
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 668939247}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: -16.784653, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.5237713, y: 4.5}
 --- !u!1 &1060287523
 GameObject:
   m_ObjectHideFlags: 0
