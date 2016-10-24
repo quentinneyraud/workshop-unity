@@ -150,7 +150,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 130192016}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.27, y: -4.05, z: 0}
+  m_LocalPosition: {x: -9.52, y: -4.08, z: 0}
   m_LocalScale: {x: 0.50932217, y: 0.50932217, z: 0.50932217}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5d604e458fd427c87675b74207541a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WalkSpeed: 50
+  WalkSpeed: 100
 --- !u!1 &523511620
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1669366650}
-  force: 2
+  force: 0.75
 --- !u!1 &624902202
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,7 +349,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 624902202}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: -0.963, z: 0}
+  m_LocalPosition: {x: -4.89, y: -0.99, z: 0}
   m_LocalScale: {x: 1.1284168, y: 1.8270613, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
@@ -447,19 +447,20 @@ EdgeCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   m_Points:
-  - {x: -16.473507, y: -1.5801852}
-  - {x: -6.759441, y: -1.5611918}
-  - {x: -6.7857404, y: -1.2136734}
-  - {x: -1.2951761, y: -1.1564631}
-  - {x: -0.52750146, y: -0.7864692}
-  - {x: 0.147143, y: -0.6052058}
-  - {x: 0.6793071, y: -0.5276089}
-  - {x: 1.325887, y: -0.5060191}
-  - {x: 2.080792, y: -0.60184216}
-  - {x: 2.6474106, y: -0.7214668}
-  - {x: 8.01684, y: -0.7971723}
-  - {x: 8.180565, y: -1.2750704}
-  - {x: 16.465826, y: -1.2984011}
+  - {x: -16.488665, y: -1.6784947}
+  - {x: -6.770003, y: -1.6759932}
+  - {x: -6.7540526, y: -1.2817338}
+  - {x: -1.2931198, y: -1.25614}
+  - {x: -0.965614, y: -1.0816104}
+  - {x: -0.5275014, y: -0.86277556}
+  - {x: 0.15472218, y: -0.6808281}
+  - {x: 0.67172813, y: -0.60025454}
+  - {x: 1.3311679, y: -0.56285644}
+  - {x: 2.0603528, y: -0.6715114}
+  - {x: 2.6095157, y: -0.8046515}
+  - {x: 7.73992, y: -0.8095608}
+  - {x: 8.451036, y: -1.2670648}
+  - {x: 16.463528, y: -1.2722948}
 --- !u!61 &668939251
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -471,9 +472,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: -5.4216013, y: -0.3484695}
+  m_Offset: {x: -5.4216013, y: -0.28522682}
   serializedVersion: 2
-  m_Size: {x: 1.9533443, y: 0.20776463}
+  m_Size: {x: 1.9533446, y: 0.011395931}
 --- !u!61 &668939252
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -573,6 +574,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 1131152665}
   - 212: {fileID: 1131152664}
+  - 61: {fileID: 1131152666}
+  - 50: {fileID: 1131152667}
   m_Layer: 0
   m_Name: crate
   m_TagString: Untagged
@@ -608,7 +611,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300158, guid: 04e4cf6bab9d4429b8cd1783fcb51476, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -626,6 +629,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!61 &1131152666
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1131152663}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.7, y: 0.75}
+--- !u!50 &1131152667
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1131152663}
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &1532588179
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,8 +896,9 @@ GameObject:
   - 212: {fileID: 1890347119}
   - 50: {fileID: 1890347118}
   - 61: {fileID: 1890347117}
+  - 95: {fileID: 1890347121}
   m_Layer: 0
-  m_Name: Monster-die_0000
+  m_Name: monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -946,6 +981,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
+--- !u!95 &1890347121
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1890347116}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e6c5cd6f0fdee497987727f5c28eacd9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1902138487
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,4 +1073,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 1669366650}
-  force: 2
+  force: 0.75
