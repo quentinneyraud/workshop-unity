@@ -11,7 +11,7 @@ public class Hero : MonoBehaviour {
 	bool isGrounded = true;
 	public bool IsGrounded {
 		get { 
-			return isGrounded; 
+			return isGrounded;
 		}
 
 		set { 
