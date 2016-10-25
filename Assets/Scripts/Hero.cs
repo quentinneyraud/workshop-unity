@@ -85,7 +85,11 @@ public class Hero : Character {
 			direction = value;
 
 			if (direction != 0) {
-				GetComponent<SpriteRenderer> ().flipX = direction != 1;
+				Vector3 newScale;
+				newScale = transform.localScale;
+				newScale.x = (direction != 1) ? -0.5f : 0.5f;
+
+				transform.localScale = newScale;
 			}
 		}
 	}
