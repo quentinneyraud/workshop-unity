@@ -156,7 +156,58 @@ public class Hero : Character {
 		rigidBody.velocity = tmpVelocity;
 	}
 
-	void onCollisionEnter2D(Collision2D collision){
-		IsJumping = false;
+	void OnCollisionEnter2D(Collision2D col){
+		switch (col.gameObject.tag)
+		{
+		case "terrain":
+			OnTerrainCollision (col);
+			break;
+		case "jewel":
+			OnJewelCollision (col);
+			break;
+		case "monster":
+			OnMonsterCollision (col);
+			break;
+		default:
+			break;
+		}
 	}
+
+	void OnTerrainCollision(Collision2D col) {
+		Vector2 normal = col.contacts [0].normal;
+
+		if (normal.x > -0.7 && normal.x < 0.7) {
+			return;
+		}
+
+		Vector2 newVelocity = rigidBody.velocity;
+		newVelocity.y = -5f;
+		newVelocity.x = (normal.x > 0.7) ? -3f : 3f;
+		rigidBody.velocity = newVelocity;
+	}
+
+	void OnJewelCollision(Collision2D col) {
+		GameObject jewel = col.gameObject;
+
+		Destroy (jewel);
+	}
+
+	void OnMonsterCollision(Collision2D col) {
+
+	}
+
+	/*void OnCollisionEnter2D (Collision2D col)
+	{
+		if (col.gameObject.tag == "player") {
+
+			Vector2 normal = col.contacts [0].normal;
+
+			if (normal.y < -0.5) {
+				rigidBody.AddForce (new Vector3 (0, 200));
+				animator.SetBool ("isDead", true);
+				GetComponent<Collider2D> ().enabled = false;
+				iTween.FadeTo (this.gameObject, 0f, 1f);
+			}
+		}
+	}*/
 }

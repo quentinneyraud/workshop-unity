@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - player
+  - terrain
+  - monster
+  - jewel
   layers:
   - Default
   - TransparentFX
