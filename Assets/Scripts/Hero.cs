@@ -3,10 +3,17 @@ using System.Collections;
 
 public class Hero : Character {
 
-	Animator animator;
-	Rigidbody2D rigidBody;
 	public float WalkSpeed;
+	public float RunSpeed;
+	public GameObject jewelMeter;
+	public GameObject jewelIndicator;
+	public int maxJewels = 5;
+
+	private Animator animator;
+	private Rigidbody2D rigidBody;
 	private bool doubleJumpAuthorize = true;
+	private int jewelCollected = 0;
+	private float jewelIndicatorStep;
 
 	bool isWalking = false;
 	public bool IsWalking {
@@ -115,6 +122,7 @@ public class Hero : Character {
 	void Start () {
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
+		jewelIndicatorStep = jewelMeter.GetComponent<SpriteRenderer> ().sprite.bounds.size.x / (maxJewels + 1);
 	}
 
 	// Update is called once per frame
@@ -144,11 +152,8 @@ public class Hero : Character {
 		Vector2 tmpVelocity = rigidBody.velocity;
 
 		if (Direction != 0 && !IsCrouching) {
-			if (Input.GetKey (KeyCode.LeftShift)) {
-				tmpVelocity.x = WalkSpeed * Direction * Time.fixedDeltaTime * 2;
-			} else {
-				tmpVelocity.x = WalkSpeed * Direction * Time.fixedDeltaTime;
-			}
+			tmpVelocity.x = Direction * Time.fixedDeltaTime;
+			tmpVelocity.x *= (Input.GetKey (KeyCode.LeftShift)) ? RunSpeed : WalkSpeed;
 		} else {
 			tmpVelocity.x = 0;
 		}
@@ -187,13 +192,22 @@ public class Hero : Character {
 	}
 
 	void OnJewelCollision(Collision2D col) {
+		jewelCollected++;
 		GameObject jewel = col.gameObject;
+		updateJewelIndicator ();
 
 		Destroy (jewel);
 	}
 
 	void OnMonsterCollision(Collision2D col) {
+		
+	}
 
+	void updateJewelIndicator () {
+		Vector3 newJewelIndicatorPosition = jewelIndicator.transform.localPosition;
+		newJewelIndicatorPosition.x = newJewelIndicatorPosition.x + jewelIndicatorStep;
+
+		iTween.MoveTo (jewelIndicator, iTween.Hash("position", newJewelIndicatorPosition, "isLocal", true, "time", 1));
 	}
 
 	/*void OnCollisionEnter2D (Collision2D col)
