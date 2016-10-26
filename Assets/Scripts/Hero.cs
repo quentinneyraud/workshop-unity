@@ -3,17 +3,19 @@ using System.Collections;
 
 public class Hero : Character {
 
-	public float WalkSpeed;
-	public float RunSpeed;
-	public GameObject jewelMeter;
-	public GameObject jewelIndicator;
-	public int maxJewels = 5;
+	public float walk_speed;
+	public float run_speed;
+	public GameObject jewel_meter;
+	public GameObject jewel_indicator;
+	public int max_jewels = 5;
 
 	private Animator animator;
 	private Rigidbody2D rigidBody;
 	private bool doubleJumpAuthorize = true;
 	private int jewelCollected = 0;
 	private float jewelIndicatorStep;
+	private AudioSource walkSound;
+	private AudioSource jumpSound;
 
 	bool isWalking = false;
 	public bool IsWalking {
@@ -22,14 +24,20 @@ public class Hero : Character {
 		}
 
 		set {
-			if (isWalking == value)
+			if (!isGrounded())
 				return;
-			
+
 			isWalking = value;
 
-			if (!IsJumping) {
-				animator.SetBool ("isWalking", isWalking == true);
+			if (isWalking) {
+				Debug.Log ("play walk sound");
+				walkSound.loop = true;
+				walkSound.Play ();
+			} else {
+				walkSound.Stop ();
 			}
+
+			animator.SetBool ("isWalking", isWalking == true);
 		}
 	}
 
@@ -64,6 +72,7 @@ public class Hero : Character {
 			isJumping = value;
 
 			if (isJumping && !IsCrouching) {
+				IsWalking = false;
 				if (YVelocity > -0.5 && YVelocity < 0.5) {
 					rigidBody.AddForce (new Vector3 (0, 200));
 					doubleJumpAuthorize = true;
@@ -76,6 +85,26 @@ public class Hero : Character {
 			}
 				
 			animator.SetBool ("isJumping", isJumping == true);
+		}
+	}
+
+	bool isHurt = false;
+	public bool IsHurt {
+		get { 
+			return isHurt; 
+		}
+
+		set { 
+			if (isHurt == value)
+				return;
+
+			isHurt = value;
+
+			if (isHurt) {
+				Invoke ("removeIsHurt", 0);
+			}
+
+			animator.SetBool ("isHurt", isHurt == true);
 		}
 	}
 
@@ -122,7 +151,9 @@ public class Hero : Character {
 	void Start () {
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
-		jewelIndicatorStep = (jewelMeter.GetComponent<SpriteRenderer> ().sprite.bounds.size.x - jewelIndicator.GetComponent<SpriteRenderer> ().sprite.bounds.size.x) / (maxJewels + 1);
+		jewelIndicatorStep = (jewel_meter.GetComponent<SpriteRenderer> ().sprite.bounds.size.x - jewel_indicator.GetComponent<SpriteRenderer> ().sprite.bounds.size.x + 0.1f) / (max_jewels + 1);
+		walkSound = GetComponents<AudioSource> ()[0];
+		jumpSound = GetComponents<AudioSource> ()[1];
 	}
 
 	// Update is called once per frame
@@ -153,7 +184,7 @@ public class Hero : Character {
 
 		if (Direction != 0 && !IsCrouching) {
 			tmpVelocity.x = Direction * Time.fixedDeltaTime;
-			tmpVelocity.x *= (Input.GetKey (KeyCode.LeftShift)) ? RunSpeed : WalkSpeed;
+			tmpVelocity.x *= (Input.GetKey (KeyCode.LeftShift)) ? run_speed : walk_speed;
 		} else {
 			tmpVelocity.x = 0;
 		}
@@ -167,11 +198,19 @@ public class Hero : Character {
 		case "terrain":
 			OnTerrainCollision (col);
 			break;
-		case "jewel":
-			OnJewelCollision (col);
-			break;
 		case "monster":
 			OnMonsterCollision (col);
+			break;
+		default:
+			break;
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D col){
+		switch (col.gameObject.tag)
+		{
+		case "jewel":
+			OnJewelCollision (col);
 			break;
 		default:
 			break;
@@ -191,7 +230,7 @@ public class Hero : Character {
 		rigidBody.velocity = newVelocity;*/
 	}
 
-	void OnJewelCollision(Collision2D col) {
+	void OnJewelCollision(Collider2D col) {
 		jewelCollected++;
 		GameObject jewel = col.gameObject;
 		updateJewelIndicator ();
@@ -200,13 +239,31 @@ public class Hero : Character {
 	}
 
 	void OnMonsterCollision(Collision2D col) {
-		
+		if (col.gameObject.tag == "monster") {
+
+			Vector2 normal = col.contacts [0].normal;
+
+			if (normal.y > -0.5) {
+				rigidBody.AddForce (new Vector3 (-200, 200));
+				animator.SetBool ("isHurt", true);
+				//iTween.FadeTo (this.gameObject, 0f, 1f);
+			}
+		}
 	}
 
 	void updateJewelIndicator () {
-		Vector3 newJewelIndicatorPosition = jewelIndicator.transform.localPosition;
+		Vector3 newJewelIndicatorPosition = jewel_indicator.transform.localPosition;
 		newJewelIndicatorPosition.x = newJewelIndicatorPosition.x + jewelIndicatorStep;
 
-		iTween.MoveTo (jewelIndicator, iTween.Hash("position", newJewelIndicatorPosition, "isLocal", true, "time", 1));
+		iTween.MoveTo (jewel_indicator, iTween.Hash("position", newJewelIndicatorPosition, "isLocal", true, "time", 1));
+	}
+
+	void removeIsHurt() {
+		Debug.Log ("remove is hurt");
+		IsHurt = false;
+	}
+
+	bool isGrounded () {
+		return YVelocity > -0.7 && YVelocity < 0.7; 
 	}
 }

@@ -15,11 +15,9 @@ public class monster : Character {
 
 	// Update is called once per frame
 	void Update () {
-		//transform.LookAt (target.transform);
-
-		/*Vector2 tmpVelocity = rigidBody.velocity;
+		Vector2 tmpVelocity = rigidBody.velocity;
 		tmpVelocity.x = -20 * Time.deltaTime;
-		rigidBody.velocity = tmpVelocity;*/
+		rigidBody.velocity = tmpVelocity;
 	}
 
 	void OnCollisionEnter2D (Collision2D col)

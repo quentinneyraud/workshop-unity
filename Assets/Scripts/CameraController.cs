@@ -55,7 +55,7 @@ public class CameraController : MonoBehaviour {
 		transform.position = newPosition;
 			
 		// tween y position
-		iTween.StopByName("camera_y");
+		//iTween.StopByName("camera_y");
 		iTween.MoveUpdate (this.gameObject, iTween.Hash ("name", "camera_y", "y", transform.position.y + (object_to_follow.transform.position.y - previousY) / 2, "time", 0.2f, "delay", 0.1f));
 
 		setPreviousY ();
