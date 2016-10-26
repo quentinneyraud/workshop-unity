@@ -122,7 +122,7 @@ public class Hero : Character {
 	void Start () {
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
-		jewelIndicatorStep = jewelMeter.GetComponent<SpriteRenderer> ().sprite.bounds.size.x / (maxJewels + 1);
+		jewelIndicatorStep = (jewelMeter.GetComponent<SpriteRenderer> ().sprite.bounds.size.x - jewelIndicator.GetComponent<SpriteRenderer> ().sprite.bounds.size.x) / (maxJewels + 1);
 	}
 
 	// Update is called once per frame
@@ -133,6 +133,11 @@ public class Hero : Character {
 		Direction = detectDirection ();
 	}
 
+	void FixedUpdate () {
+		YVelocity = rigidBody.velocity.y;
+		move ();
+	}
+
 	int detectDirection () {
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			return -1;
@@ -141,11 +146,6 @@ public class Hero : Character {
 		} else {
 			return 0;
 		}
-	}
- 
-	void FixedUpdate () {
-		YVelocity = rigidBody.velocity.y;
-		move ();
 	}
 
 	void move (){
@@ -179,7 +179,7 @@ public class Hero : Character {
 	}
 
 	void OnTerrainCollision(Collision2D col) {
-		Vector2 normal = col.contacts [0].normal;
+		/*Vector2 normal = col.contacts [0].normal;
 
 		if (normal.x > -0.7 && normal.x < 0.7) {
 			return;
@@ -188,7 +188,7 @@ public class Hero : Character {
 		Vector2 newVelocity = rigidBody.velocity;
 		newVelocity.y = -5f;
 		newVelocity.x = (normal.x > 0.7) ? -3f : 3f;
-		rigidBody.velocity = newVelocity;
+		rigidBody.velocity = newVelocity;*/
 	}
 
 	void OnJewelCollision(Collision2D col) {
@@ -209,19 +209,4 @@ public class Hero : Character {
 
 		iTween.MoveTo (jewelIndicator, iTween.Hash("position", newJewelIndicatorPosition, "isLocal", true, "time", 1));
 	}
-
-	/*void OnCollisionEnter2D (Collision2D col)
-	{
-		if (col.gameObject.tag == "player") {
-
-			Vector2 normal = col.contacts [0].normal;
-
-			if (normal.y < -0.5) {
-				rigidBody.AddForce (new Vector3 (0, 200));
-				animator.SetBool ("isDead", true);
-				GetComponent<Collider2D> ().enabled = false;
-				iTween.FadeTo (this.gameObject, 0f, 1f);
-			}
-		}
-	}*/
 }

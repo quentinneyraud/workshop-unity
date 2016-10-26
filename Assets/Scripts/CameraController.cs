@@ -10,12 +10,14 @@ public class CameraController : MonoBehaviour {
 	Camera camera;
 	private float minX = 0f;
 	private float maxX = 0f;
-	private float offset_y = 0f;
+	private float offsetY = 0f;
+	private float previousY = 0f;
 
 	// Use this for initialization
 	void Start () {
 		this.getCameraLimitValues ();
-		offset_y = camera.transform.position.y - object_to_follow.transform.position.y;
+		offsetY = transform.position.y - object_to_follow.transform.position.y;
+		setPreviousY ();
 	}
 
 	// Update is called once per frame
@@ -37,10 +39,9 @@ public class CameraController : MonoBehaviour {
 	}
 
 	void updateCameraPosition (){
-		Vector3 newPosition = new Vector3();
+		Vector3 newPosition = transform.position;
 
-		newPosition.y = transform.position.y;
-		newPosition.z = transform.position.z;
+		//newPosition.y = transform.position.y + (object_to_follow.transform.position.y - previousY) / 2;
 
 		if (object_to_follow.transform.position.x < minX) {
 			newPosition.x = minX;
@@ -50,6 +51,18 @@ public class CameraController : MonoBehaviour {
 			newPosition.x = object_to_follow.transform.position.x;
 		}
 
+		// set x position
 		transform.position = newPosition;
+			
+		// tween y position
+		iTween.StopByName("camera_y");
+		iTween.MoveUpdate (this.gameObject, iTween.Hash ("name", "camera_y", "y", transform.position.y + (object_to_follow.transform.position.y - previousY) / 2, "time", 0.2f, "delay", 0.1f));
+
+		setPreviousY ();
 	}
+
+	void setPreviousY () {
+		previousY = object_to_follow.transform.position.y;
+	}
+
 }
