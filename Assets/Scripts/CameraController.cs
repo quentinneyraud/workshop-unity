@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 public class CameraController : MonoBehaviour {
 
@@ -7,7 +8,7 @@ public class CameraController : MonoBehaviour {
 	public GameObject camera_limit;
 
 	private RectTransform cameraLimitRectangle;
-	Camera camera;
+	private Camera camera;
 	private float minX = 0f;
 	private float maxX = 0f;
 	private float offsetY = 0f;
@@ -15,7 +16,7 @@ public class CameraController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.getCameraLimitValues ();
+		getCameraLimitValues ();
 		offsetY = transform.position.y - object_to_follow.transform.position.y;
 		setPreviousY ();
 	}
@@ -55,7 +56,6 @@ public class CameraController : MonoBehaviour {
 		transform.position = newPosition;
 			
 		// tween y position
-		//iTween.StopByName("camera_y");
 		iTween.MoveUpdate (this.gameObject, iTween.Hash ("name", "camera_y", "y", transform.position.y + (object_to_follow.transform.position.y - previousY) / 2, "time", 0.2f, "delay", 0.1f));
 
 		setPreviousY ();
@@ -63,6 +63,11 @@ public class CameraController : MonoBehaviour {
 
 	void setPreviousY () {
 		previousY = object_to_follow.transform.position.y;
+	}
+
+	void toggleDrugEffect () {
+		gameObject.GetComponent<ColorCorrectionCurves> ().enabled = !gameObject.GetComponent<ColorCorrectionCurves> ().enabled;
+		gameObject.GetComponent<Vortex> ().enabled = !gameObject.GetComponent<Vortex> ().enabled;
 	}
 
 }

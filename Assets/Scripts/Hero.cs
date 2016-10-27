@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Hero : Character {
+public class Hero : MonoBehaviour {
 
 	public float walk_speed;
 	public float run_speed;
 	public GameObject jewel_meter;
-	public GameObject jewel_indicator;
-	public int max_jewels = 5;
+	public GameObject script;
 
 	private Animator animator;
 	private Rigidbody2D rigidBody;
 	private bool doubleJumpAuthorize = true;
 	private int jewelCollected = 0;
-	private float jewelIndicatorStep;
 	private AudioSource walkSound;
 	private AudioSource jumpSound;
 
@@ -30,7 +28,6 @@ public class Hero : Character {
 			isWalking = value;
 
 			if (isWalking) {
-				Debug.Log ("play walk sound");
 				walkSound.loop = true;
 				walkSound.Play ();
 			} else {
@@ -151,9 +148,9 @@ public class Hero : Character {
 	void Start () {
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
-		jewelIndicatorStep = (jewel_meter.GetComponent<SpriteRenderer> ().sprite.bounds.size.x - jewel_indicator.GetComponent<SpriteRenderer> ().sprite.bounds.size.x + 0.1f) / (max_jewels + 1);
 		walkSound = GetComponents<AudioSource> ()[0];
 		jumpSound = GetComponents<AudioSource> ()[1];
+		//jewel_meter.transform.Find("jewel-grayscale").gameObject.SetActive(false);
 	}
 
 	// Update is called once per frame
@@ -252,10 +249,9 @@ public class Hero : Character {
 	}
 
 	void updateJewelIndicator () {
-		Vector3 newJewelIndicatorPosition = jewel_indicator.transform.localPosition;
-		newJewelIndicatorPosition.x = newJewelIndicatorPosition.x + jewelIndicatorStep;
-
-		iTween.MoveTo (jewel_indicator, iTween.Hash("position", newJewelIndicatorPosition, "isLocal", true, "time", 1));
+		string name = "jewel-indicator-grayscale-" + jewelCollected;
+		GameObject jewelGrayscale = jewel_meter.transform.Find(name).gameObject;
+		jewel_meter.transform.Find(name).gameObject.SetActive(false);
 	}
 
 	void removeIsHurt() {

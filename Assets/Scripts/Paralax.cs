@@ -3,14 +3,15 @@ using System.Collections;
 
 public class Paralax : MonoBehaviour {
 
-	public GameObject camera;
 	public float force;
 
+	private GameObject camera;
 	private float cameraX;
 	private float cameraY;
 
 	// Use this for initialization
 	void Start () {
+		camera = GameObject.FindGameObjectWithTag ("MainCamera");
 		cameraX = camera.transform.position.x;
 		cameraY = camera.transform.position.y;
 	}
