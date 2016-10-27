@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Portal : MonoBehaviour {
+public class Portal : Application {
+
+	public GameObject to;
 
 	// Use this for initialization
 	void Start () {
-	
+		base.Start ();
 	}
 	
 	// Update is called once per frame
@@ -15,9 +17,7 @@ public class Portal : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col){
 		if (col.gameObject.tag == "player") {
-			GameObject camera = GameObject.FindGameObjectWithTag ("MainCamera");
-
-			camera.GetComponent<CameraController> ().ToggleDrugEffect ();
+			player.transform.position = to.transform.position;
 		}
 	}
 }

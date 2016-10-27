@@ -2,13 +2,11 @@
 using System.Collections;
 using UnityStandardAssets.ImageEffects;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : Application {
 
-	public GameObject object_to_follow;
 	public GameObject camera_limit;
 
 	private RectTransform cameraLimitRectangle;
-	private Camera camera;
 	private float minX = 0f;
 	private float maxX = 0f;
 	private float offsetY = 0f;
@@ -17,16 +15,17 @@ public class CameraController : MonoBehaviour {
 	private ColorCorrectionCurves saturateEffect;
 
 	void Start () {
+		base.Start ();
 		GetCameraLimitValues ();
 		SetPreviousY ();
 
-		offsetY = transform.position.y - object_to_follow.transform.position.y;
+		offsetY = transform.position.y - player.transform.position.y;
 		vortexEffect = gameObject.GetComponent<Vortex> ();
 		saturateEffect = gameObject.GetComponent<ColorCorrectionCurves> ();
 	}
 
 	void Update () {
-
+		
 	}
 
 	void LateUpdate() {
@@ -48,7 +47,7 @@ public class CameraController : MonoBehaviour {
 	void UpdateCameraPosition (){
 		
 		UpdateCameraXPosition ();
-		TweenCameraYPosition ();
+		//TweenCameraYPosition ();
 	
 		SetPreviousY ();
 	}
@@ -56,19 +55,20 @@ public class CameraController : MonoBehaviour {
 	void UpdateCameraXPosition () {
 		Vector3 newPosition = transform.position;
 
-		if (object_to_follow.transform.position.x < minX) {
+		if (player.transform.position.x < minX) {
 			newPosition.x = minX;
-		} else if (object_to_follow.transform.position.x > maxX) {
+		} else if (player.transform.position.x > maxX) {
 			newPosition.x = maxX;
 		} else {
-			newPosition.x = object_to_follow.transform.position.x;
+			newPosition.x = player.transform.position.x;
 		}
+		newPosition.y = player.transform.position.y + offsetY;
 
 		transform.position = newPosition;
 	}
 
 	void TweenCameraYPosition () {
-		float objectToFollowYPositionDifference = object_to_follow.transform.position.y - previousY;
+		float objectToFollowYPositionDifference = player.transform.position.y - previousY;
 
 		iTween.MoveUpdate (this.gameObject, iTween.Hash (
 			"y", transform.position.y + objectToFollowYPositionDifference / 2, 
@@ -79,7 +79,7 @@ public class CameraController : MonoBehaviour {
 
 	// Keep previous following object y
 	void SetPreviousY () {
-		previousY = object_to_follow.transform.position.y;
+		previousY = player.transform.position.y;
 	}
 
 	// Enable vortex & saturate effects

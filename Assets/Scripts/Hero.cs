@@ -13,7 +13,7 @@ public class Hero : MonoBehaviour {
 	private bool doubleJumpAuthorize = true;
 	private int jewelCollected = 0;
 	private AudioSource walkSound;
-	private AudioSource jumpSound;
+	//private AudioSource jumpSound;
 
 	bool isWalking = false;
 	public bool IsWalking {
@@ -149,7 +149,7 @@ public class Hero : MonoBehaviour {
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
 		walkSound = GetComponents<AudioSource> ()[0];
-		jumpSound = GetComponents<AudioSource> ()[1];
+		//jumpSound = GetComponents<AudioSource> ()[1];
 	}
 
 	// Update is called once per frame
@@ -246,7 +246,6 @@ public class Hero : MonoBehaviour {
 
 	void UpdateJewelIndicator () {
 		string name = "jewel-indicator-grayscale-" + jewelCollected;
-		GameObject jewelGrayscale = jewel_meter.transform.Find(name).gameObject;
 		jewel_meter.transform.Find(name).gameObject.SetActive(false);
 	}
 
