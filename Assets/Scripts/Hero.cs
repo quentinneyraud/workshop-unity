@@ -22,7 +22,7 @@ public class Hero : MonoBehaviour {
 		}
 
 		set {
-			if (!isGrounded())
+			if (!IsGrounded())
 				return;
 
 			isWalking = value;
@@ -70,7 +70,7 @@ public class Hero : MonoBehaviour {
 
 			if (isJumping && !IsCrouching) {
 				IsWalking = false;
-				if (YVelocity > -0.5 && YVelocity < 0.5) {
+				if (IsGrounded()) {
 					rigidBody.AddForce (new Vector3 (0, 200));
 					doubleJumpAuthorize = true;
 				} else {
@@ -98,7 +98,7 @@ public class Hero : MonoBehaviour {
 			isHurt = value;
 
 			if (isHurt) {
-				Invoke ("removeIsHurt", 0);
+				StartCoroutine (removeIsHurt());
 			}
 
 			animator.SetBool ("isHurt", isHurt == true);
@@ -150,7 +150,6 @@ public class Hero : MonoBehaviour {
 		rigidBody = GetComponent<Rigidbody2D>();
 		walkSound = GetComponents<AudioSource> ()[0];
 		jumpSound = GetComponents<AudioSource> ()[1];
-		//jewel_meter.transform.Find("jewel-grayscale").gameObject.SetActive(false);
 	}
 
 	// Update is called once per frame
@@ -158,15 +157,15 @@ public class Hero : MonoBehaviour {
 		IsJumping = Input.GetKey (KeyCode.UpArrow);
 		IsCrouching = Input.GetKey (KeyCode.DownArrow);
 		IsWalking = Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.RightArrow);
-		Direction = detectDirection ();
+		Direction = DetectDirection ();
 	}
 
 	void FixedUpdate () {
 		YVelocity = rigidBody.velocity.y;
-		move ();
+		Move ();
 	}
 
-	int detectDirection () {
+	int DetectDirection () {
 		if (Input.GetKey (KeyCode.LeftArrow)) {
 			return -1;
 		} else if (Input.GetKey (KeyCode.RightArrow)) {
@@ -176,7 +175,7 @@ public class Hero : MonoBehaviour {
 		}
 	}
 
-	void move (){
+	void Move (){
 		Vector2 tmpVelocity = rigidBody.velocity;
 
 		if (Direction != 0 && !IsCrouching) {
@@ -229,10 +228,7 @@ public class Hero : MonoBehaviour {
 
 	void OnJewelCollision(Collider2D col) {
 		jewelCollected++;
-		GameObject jewel = col.gameObject;
-		updateJewelIndicator ();
-
-		Destroy (jewel);
+		UpdateJewelIndicator ();
 	}
 
 	void OnMonsterCollision(Collision2D col) {
@@ -241,25 +237,44 @@ public class Hero : MonoBehaviour {
 			Vector2 normal = col.contacts [0].normal;
 
 			if (normal.y > -0.5) {
-				rigidBody.AddForce (new Vector3 (-200, 200));
-				animator.SetBool ("isHurt", true);
-				//iTween.FadeTo (this.gameObject, 0f, 1f);
+				rigidBody.AddForce (new Vector3(-1000, 250, 0));
+				IsHurt = true;
+				StartCoroutine (FlashOnHurt());
 			}
 		}
 	}
 
-	void updateJewelIndicator () {
+	void UpdateJewelIndicator () {
 		string name = "jewel-indicator-grayscale-" + jewelCollected;
 		GameObject jewelGrayscale = jewel_meter.transform.Find(name).gameObject;
 		jewel_meter.transform.Find(name).gameObject.SetActive(false);
 	}
 
-	void removeIsHurt() {
-		Debug.Log ("remove is hurt");
+	IEnumerator removeIsHurt() {
+		yield return new WaitForSeconds (0.7f);
 		IsHurt = false;
 	}
 
-	bool isGrounded () {
-		return YVelocity > -0.7 && YVelocity < 0.7; 
+	bool IsGrounded () {
+		return YVelocity > -0.2 && YVelocity < 0.2; 
+	}
+
+	IEnumerator FlashOnHurt () {
+		iTween.FadeTo (this.gameObject, iTween.Hash(
+			"name", "player_flash",
+			"alpha", 0,
+			"time", 0.1f,
+			"easetype", "linear",
+			"looptype", "pingPong"
+		));
+
+		yield return new WaitForSeconds (0.5f);
+
+		iTween.StopByName ("player_flash");
+		iTween.FadeTo (this.gameObject, iTween.Hash(
+			"alpha", 1,
+			"time", 0.1f,
+			"easetype", "linear"
+		));
 	}
 }

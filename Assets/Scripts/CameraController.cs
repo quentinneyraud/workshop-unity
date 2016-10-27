@@ -13,24 +13,28 @@ public class CameraController : MonoBehaviour {
 	private float maxX = 0f;
 	private float offsetY = 0f;
 	private float previousY = 0f;
+	private Vortex vortexEffect;
+	private ColorCorrectionCurves saturateEffect;
 
-	// Use this for initialization
 	void Start () {
-		getCameraLimitValues ();
+		GetCameraLimitValues ();
+		SetPreviousY ();
+
 		offsetY = transform.position.y - object_to_follow.transform.position.y;
-		setPreviousY ();
+		vortexEffect = gameObject.GetComponent<Vortex> ();
+		saturateEffect = gameObject.GetComponent<ColorCorrectionCurves> ();
 	}
 
-	// Update is called once per frame
 	void Update () {
 
 	}
 
 	void LateUpdate() {
-		this.updateCameraPosition ();
+		UpdateCameraPosition ();
 	}
 
-	void getCameraLimitValues () {
+	// set camera min & max values for x property using camera_limit GameObject
+	void GetCameraLimitValues () {
 		camera = GetComponent<Camera> ();
 		float width = 2f * camera.orthographicSize * camera.aspect;
 		cameraLimitRectangle = camera_limit.GetComponent<RectTransform> ();
@@ -39,10 +43,18 @@ public class CameraController : MonoBehaviour {
 		maxX = camera_limit.transform.position.x + cameraLimitRectangle.rect.width - width / 2;
 	}
 
-	void updateCameraPosition (){
-		Vector3 newPosition = transform.position;
+	// Set x camera position using object_to_follow x position
+	// Tween y camera position
+	void UpdateCameraPosition (){
+		
+		UpdateCameraXPosition ();
+		TweenCameraYPosition ();
+	
+		SetPreviousY ();
+	}
 
-		//newPosition.y = transform.position.y + (object_to_follow.transform.position.y - previousY) / 2;
+	void UpdateCameraXPosition () {
+		Vector3 newPosition = transform.position;
 
 		if (object_to_follow.transform.position.x < minX) {
 			newPosition.x = minX;
@@ -52,22 +64,62 @@ public class CameraController : MonoBehaviour {
 			newPosition.x = object_to_follow.transform.position.x;
 		}
 
-		// set x position
 		transform.position = newPosition;
-			
-		// tween y position
-		iTween.MoveUpdate (this.gameObject, iTween.Hash ("name", "camera_y", "y", transform.position.y + (object_to_follow.transform.position.y - previousY) / 2, "time", 0.2f, "delay", 0.1f));
-
-		setPreviousY ();
 	}
 
-	void setPreviousY () {
+	void TweenCameraYPosition () {
+		float objectToFollowYPositionDifference = object_to_follow.transform.position.y - previousY;
+
+		iTween.MoveUpdate (this.gameObject, iTween.Hash (
+			"y", transform.position.y + objectToFollowYPositionDifference / 2, 
+			"time", 0.2f, 
+			"delay", 0.1f
+		));
+	}
+
+	// Keep previous following object y
+	void SetPreviousY () {
 		previousY = object_to_follow.transform.position.y;
 	}
 
-	void toggleDrugEffect () {
-		gameObject.GetComponent<ColorCorrectionCurves> ().enabled = !gameObject.GetComponent<ColorCorrectionCurves> ().enabled;
-		gameObject.GetComponent<Vortex> ().enabled = !gameObject.GetComponent<Vortex> ().enabled;
+	// Enable vortex & saturate effects
+	// Tween their values
+	public void ToggleDrugEffect () {
+		saturateEffect.enabled = !saturateEffect.enabled;
+		vortexEffect.enabled = !vortexEffect.enabled;
+
+		if (saturateEffect.enabled) {
+			iTween.ValueTo(new GameObject(), iTween.Hash(
+				"name", "vortex_angle_tween",
+				"from", -75,
+				"to", 75,
+				"time", 3,
+				"onupdate", "SetVortexAngle",
+				"easetype", "linear",
+				"looptype", "pingPong"
+			));
+
+			iTween.ValueTo(new GameObject(), iTween.Hash(
+				"name", "saturate_value_tween",
+				"from", 2,
+				"to", 5,
+				"time", 1,
+				"onupdate", "SetSaturationValue",
+				"easetype", "linear",
+				"looptype", "pingPong"
+			));
+		} else {
+			iTween.StopByName ("vortex_angle_tween");
+			iTween.StopByName ("saturate_value_tween");
+		}
+	}
+
+	void SetVortexAngle(float value) {
+		vortexEffect.angle = value;
+	}
+
+	void SetSaturationValue(float value) {
+		saturateEffect.saturation = value;
 	}
 
 }

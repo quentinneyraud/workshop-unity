@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class jewel : MonoBehaviour {
+public class Jewel : MonoBehaviour {
 
 	private Vector3 startPosition;
 
@@ -12,12 +12,18 @@ public class jewel : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		jewelFloatingeffect ();
+		SetjewelFloatingEffect ();
 	}
 
-	void jewelFloatingeffect() {
+	void SetjewelFloatingEffect() {
 		Vector3 newPosition = startPosition;
 		newPosition.y = startPosition.y + 0.3f * Mathf.Sin(4f * Time.time);
 		iTween.MoveUpdate (this.gameObject, newPosition, 4f);
+	}
+
+	void OnTriggerEnter2D(Collider2D col){
+		if (col.gameObject.tag == "player") {
+			Destroy (this.gameObject);
+		}
 	}
 }

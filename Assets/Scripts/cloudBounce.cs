@@ -1,24 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class cloudBounce : MonoBehaviour {
+public class CloudBounce : MonoBehaviour {
 
-	private Vector3 startPosition;
-
-	// Use this for initialization
 	void Start () {
-		startPosition = transform.position;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		cloudFloatingeffect ();
+		SetCloudFloatingeffect ();
 	}
 
-	void cloudFloatingeffect() {
-		Vector3 newPosition = startPosition;
-		newPosition.y = startPosition.y + 1f * Mathf.Sin(1f * Time.time);
-		newPosition.x = transform.position.x + 5f * Mathf.Sin (1f * Time.time);
-		iTween.MoveUpdate (this.gameObject, iTween.Hash("position", newPosition, "time", 20f));
+	void Update () {
+		
+	}
+
+	// Tween cloud position
+	void SetCloudFloatingeffect() {
+		iTween.MoveTo (this.gameObject, iTween.Hash(
+			"x", transform.position.x + 0.8f,
+			"y", transform.position.y + 0.15f,
+			"time", 6f,
+			"easetype", "linear",
+			"looptype", "pingPong"
+		));
 	}
 }

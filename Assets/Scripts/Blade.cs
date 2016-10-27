@@ -3,10 +3,8 @@ using System.Collections;
 
 public class Blade : MonoBehaviour {
 
-	public int spin_speed = 30;
-
-	// Use this for initialization
 	void Start () {
+		// Infinite rotate
 		iTween.RotateBy (this.gameObject, iTween.Hash(
 			"z", 1f, 
 			"easetype", "linear",
@@ -14,8 +12,7 @@ public class Blade : MonoBehaviour {
 			"time", 5f
 		));
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		
 	}
