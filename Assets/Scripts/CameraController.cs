@@ -63,6 +63,15 @@ public class CameraController : Application {
 	// Enable vortex & saturate effects
 	// Tween their values
 	public void ToggleUpSideDownEffect () {
+
+		// Ensure objects are instanciated
+		if (vignetteEffect == null) {
+			vignetteEffect = gameObject.GetComponent<VignetteAndChromaticAberration> ();
+		}
+		if (grayscaleEffect == null) {
+			grayscaleEffect = gameObject.GetComponent<Grayscale> ();
+		}
+
 		vignetteEffect.enabled = !vignetteEffect.enabled;
 		grayscaleEffect.enabled = !grayscaleEffect.enabled;
 

@@ -48,6 +48,7 @@ public class Hero : Application {
 					doubleJumpAuthorize = true;
 				} else {
 					if (doubleJumpAuthorize) {
+						startJumpSound ();
 						doubleJumpAuthorize = false;
 						rigidBody.AddForce (new Vector3 (0, 200));
 					}
@@ -208,6 +209,7 @@ public class Hero : Application {
 	IEnumerator OnDead () {
 
 		IsDead = true;
+		startDeathSound ();
 
 		yield return new WaitForSeconds (2f);
 
@@ -234,5 +236,9 @@ public class Hero : Application {
 
 	public void startKillSound() {
 		audioSources [3].Play ();
+	}
+
+	public void startDeathSound() {
+		audioSources [4].Play ();
 	}
 }
