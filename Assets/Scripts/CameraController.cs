@@ -13,7 +13,7 @@ public class CameraController : Application {
 	private VignetteAndChromaticAberration vignetteEffect;
 	private Grayscale grayscaleEffect;
 
-	void Start () {
+	protected override void Start () {
 		base.Start ();
 		GetCameraLimitValues ();
 

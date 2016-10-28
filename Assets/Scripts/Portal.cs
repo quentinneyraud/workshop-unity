@@ -6,7 +6,7 @@ public class Portal : Application {
 	public GameObject to;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 		base.Start ();
 	}
 	

@@ -7,7 +7,8 @@ namespace Workshop {
 		private static WorldManager instance;
 		private int world = 0;
 		private CameraController cameraController;
-		protected AudioSource ambiantAudio;
+		protected AudioSource ambiantAudioNormalWorld;
+		protected AudioSource ambiantAudioUpsideDownWorld;
 
 		public static WorldManager getInstance() {
 			if (instance == null) {
@@ -19,7 +20,8 @@ namespace Workshop {
 
 		public WorldManager () {
 			cameraController = Camera.main.GetComponent<CameraController> ();
-			ambiantAudio = Camera.main.GetComponent<AudioSource> ();
+			ambiantAudioNormalWorld = Camera.main.GetComponents<AudioSource> ()[0];
+			ambiantAudioUpsideDownWorld = Camera.main.GetComponents<AudioSource> ()[1];
 		}
 
 		public void ToggleWorld () {
@@ -27,9 +29,11 @@ namespace Workshop {
 			cameraController.ToggleUpSideDownEffect ();
 
 			if (isUpsideDownWorld ()) {
-				iTween.AudioTo (ambiantAudio.gameObject, 0, 1, 1.5f);
+				ambiantAudioNormalWorld.Pause ();
+				ambiantAudioUpsideDownWorld.Play ();
 			} else {
-				iTween.AudioTo (ambiantAudio.gameObject, 100, 1, 1.5f);
+				ambiantAudioNormalWorld.Play ();
+				ambiantAudioUpsideDownWorld.Pause ();
 			}
 		}
 

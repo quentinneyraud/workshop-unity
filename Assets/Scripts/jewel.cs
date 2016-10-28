@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Jewel : MonoBehaviour {
+public class Jewel : Application {
 
 	private Vector3 startPosition;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		startPosition = transform.position;
 	}
 

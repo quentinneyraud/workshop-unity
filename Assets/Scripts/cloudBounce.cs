@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CloudBounce : Application {
 
-	void Start () {
+	protected override void Start () {
 		base.Start ();
 		SetCloudFloatingeffect ();
 	}

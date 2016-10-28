@@ -11,8 +11,6 @@ public class Hero : Application {
 	private Rigidbody2D rigidBody;
 	private bool doubleJumpAuthorize = true;
 	private int jewelCollected = 0;
-	private AudioSource walkSound;
-	//private AudioSource jumpSound;
 
 	bool isWalking = false;
 	public bool IsWalking {
@@ -26,32 +24,7 @@ public class Hero : Application {
 
 			isWalking = value;
 
-			if (isWalking) {
-				walkSound.loop = true;
-				walkSound.Play ();
-			} else {
-				walkSound.Stop ();
-			}
-
 			animator.SetBool ("isWalking", isWalking == true);
-		}
-	}
-
-	bool isCrouching = false;
-	public bool IsCrouching {
-		get { 
-			return isCrouching; 
-		}
-
-		set { 
-			if (isCrouching == value)
-				return;
-
-			isCrouching = value;
-
-			if (!IsJumping) {
-				animator.SetBool ("isCrouching", isCrouching == true);
-			}
 		}
 	}
 
@@ -67,7 +40,7 @@ public class Hero : Application {
 
 			isJumping = value;
 
-			if (isJumping && !IsCrouching) {
+			if (isJumping) {
 				IsWalking = false;
 				if (IsGrounded()) {
 					rigidBody.AddForce (new Vector3 (0, 200));
@@ -84,23 +57,19 @@ public class Hero : Application {
 		}
 	}
 
-	bool isHurt = false;
-	public bool IsHurt {
+	bool isDead = false;
+	public bool IsDead {
 		get { 
-			return isHurt; 
+			return isDead; 
 		}
 
 		set { 
-			if (isHurt == value)
+			if (isDead == value)
 				return;
 
-			isHurt = value;
+			isDead = value;
 
-			if (isHurt) {
-				StartCoroutine (removeIsHurt());
-			}
-
-			animator.SetBool ("isHurt", isHurt == true);
+			animator.SetBool ("isDead", isDead == true);
 		}
 	}
 
@@ -144,18 +113,15 @@ public class Hero : Application {
 
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 		base.Start ();
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
-		walkSound = GetComponents<AudioSource> ()[0];
-		//jumpSound = GetComponents<AudioSource> ()[1];
 	}
 
 	// Update is called once per frame
 	void Update () {
 		IsJumping = Input.GetKey (KeyCode.UpArrow);
-		IsCrouching = Input.GetKey (KeyCode.DownArrow);
 		IsWalking = Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.RightArrow);
 		Direction = DetectDirection ();
 	}
@@ -178,7 +144,7 @@ public class Hero : Application {
 	void Move (){
 		Vector2 tmpVelocity = rigidBody.velocity;
 
-		if (Direction != 0 && !IsCrouching) {
+		if (Direction != 0) {
 			tmpVelocity.x = Direction * Time.fixedDeltaTime;
 			tmpVelocity.x *= (Input.GetKey (KeyCode.LeftShift)) ? run_speed : walk_speed;
 		} else {
@@ -191,9 +157,6 @@ public class Hero : Application {
 	void OnCollisionEnter2D(Collision2D col){
 		switch (col.gameObject.tag)
 		{
-		case "terrain":
-			OnTerrainCollision (col);
-			break;
 		case "monster":
 			OnMonsterCollision (col);
 			break;
@@ -213,34 +176,14 @@ public class Hero : Application {
 		}
 	}
 
-	void OnTerrainCollision(Collision2D col) {
-		/*Vector2 normal = col.contacts [0].normal;
-
-		if (normal.x > -0.7 && normal.x < 0.7) {
-			return;
-		}
-
-		Vector2 newVelocity = rigidBody.velocity;
-		newVelocity.y = -5f;
-		newVelocity.x = (normal.x > 0.7) ? -3f : 3f;
-		rigidBody.velocity = newVelocity;*/
-	}
-
 	void OnJewelCollision(Collider2D col) {
 		jewelCollected++;
 		UpdateJewelIndicator ();
 	}
 
 	void OnMonsterCollision(Collision2D col) {
-		if (col.gameObject.tag == "monster") {
-
-			Vector2 normal = col.contacts [0].normal;
-
-			if (normal.y > -0.5) {
-				rigidBody.AddForce (new Vector3(-1000, 250, 0));
-				IsHurt = true;
-				StartCoroutine (FlashOnHurt());
-			}
+		if (col.contacts [0].normal.y < 0.5) {
+			StartCoroutine (OnDead());
 		}
 	}
 
@@ -249,31 +192,16 @@ public class Hero : Application {
 		jewel_meter.transform.Find(name).gameObject.SetActive(false);
 	}
 
-	IEnumerator removeIsHurt() {
-		yield return new WaitForSeconds (0.7f);
-		IsHurt = false;
-	}
-
 	bool IsGrounded () {
 		return YVelocity > -0.2 && YVelocity < 0.2; 
 	}
 
-	IEnumerator FlashOnHurt () {
-		iTween.FadeTo (this.gameObject, iTween.Hash(
-			"name", "player_flash",
-			"alpha", 0,
-			"time", 0.1f,
-			"easetype", "linear",
-			"looptype", "pingPong"
-		));
+	IEnumerator OnDead () {
 
-		yield return new WaitForSeconds (0.5f);
+		IsDead = true;
 
-		iTween.StopByName ("player_flash");
-		iTween.FadeTo (this.gameObject, iTween.Hash(
-			"alpha", 1,
-			"time", 0.1f,
-			"easetype", "linear"
-		));
+		yield return new WaitForSeconds (1f);
+
+		UnityEngine.Application.LoadLevel (UnityEngine.Application.loadedLevel);
 	}
 }

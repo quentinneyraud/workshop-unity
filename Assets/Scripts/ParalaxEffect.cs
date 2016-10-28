@@ -8,7 +8,7 @@ public class ParalaxEffect : Application {
 	private float cameraX;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 		base.Start ();
 		cameraX = camera.transform.position.x;
 	}

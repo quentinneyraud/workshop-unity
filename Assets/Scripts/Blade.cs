@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Blade : MonoBehaviour {
+public class Blade : Application {
 
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		// Infinite rotate
 		iTween.RotateBy (this.gameObject, iTween.Hash(
 			"z", 1f, 

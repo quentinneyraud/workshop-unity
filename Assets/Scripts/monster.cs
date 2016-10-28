@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Monster : MonoBehaviour {
+public class Monster : Application {
 
 	public float distance;
 	public float speed;
@@ -13,7 +13,8 @@ public class Monster : MonoBehaviour {
 	private float xMin;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
+		base.Start ();
 		rigidBody = GetComponent<Rigidbody2D> ();
 		animator = GetComponent<Animator> ();
 
