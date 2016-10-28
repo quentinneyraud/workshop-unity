@@ -20,9 +20,7 @@ public class ParalaxEffect : Application {
 
 	void LateUpdate (){
 		Vector3 tmpPosition = transform.position;
-
 		tmpPosition.x -= (camera.transform.position.x - cameraX) * force;
-
 		transform.position = tmpPosition;
 
 		cameraX = camera.transform.position.x;

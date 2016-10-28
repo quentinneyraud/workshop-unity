@@ -11,7 +11,6 @@ public class Monster : MonoBehaviour {
 	private float direction = 1;
 	private float xMax;
 	private float xMin;
-	private int size = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -49,18 +48,6 @@ public class Monster : MonoBehaviour {
 
 			if (normal.y < -0.5) {
 				StartCoroutine (Kill ());
-			} else {
-				if (size < 5) {
-					Vector3 scale = transform.localScale;
-
-					iTween.ScaleTo (this.gameObject, iTween.Hash (
-						"x", scale.x * 1.2f,
-						"y", scale.y * 1.2f,
-						"time", 0.2f,
-						"easetype", "easeInExpo"
-					));
-					size++;
-				}
 			}
 		}
 	}

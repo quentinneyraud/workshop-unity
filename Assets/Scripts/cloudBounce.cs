@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CloudBounce : MonoBehaviour {
+public class CloudBounce : Application {
 
 	void Start () {
+		base.Start ();
 		SetCloudFloatingeffect ();
 	}
 

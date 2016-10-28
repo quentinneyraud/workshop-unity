@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Hero : MonoBehaviour {
+public class Hero : Application {
 
 	public float walk_speed;
 	public float run_speed;
 	public GameObject jewel_meter;
-	public GameObject script;
 
 	private Animator animator;
 	private Rigidbody2D rigidBody;
@@ -146,6 +145,7 @@ public class Hero : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		base.Start ();
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
 		walkSound = GetComponents<AudioSource> ()[0];

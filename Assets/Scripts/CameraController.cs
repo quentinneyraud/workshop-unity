@@ -10,21 +10,18 @@ public class CameraController : Application {
 	private float minX = 0f;
 	private float maxX = 0f;
 	private float offsetY = 0f;
-	private float previousY = 0f;
 	private VignetteAndChromaticAberration vignetteEffect;
 	private Grayscale grayscaleEffect;
 
 	void Start () {
 		base.Start ();
 		GetCameraLimitValues ();
-		SetPreviousY ();
-
 
 		offsetY = transform.position.y - player.transform.position.y;
+
 		if (gameObject.tag == "MainCamera") {
 			vignetteEffect = gameObject.GetComponent<VignetteAndChromaticAberration> ();
 			grayscaleEffect = gameObject.GetComponent<Grayscale> ();
-			ToggleUpSideDownEffect ();
 		}
 	}
 
@@ -49,14 +46,6 @@ public class CameraController : Application {
 	// Set x camera position using object_to_follow x position
 	// Tween y camera position
 	void UpdateCameraPosition (){
-		
-		UpdateCameraXPosition ();
-		//TweenCameraYPosition ();
-	
-		SetPreviousY ();
-	}
-
-	void UpdateCameraXPosition () {
 		Vector3 newPosition = transform.position;
 
 		if (player.transform.position.x < minX) {
@@ -69,21 +58,6 @@ public class CameraController : Application {
 		newPosition.y = player.transform.position.y + offsetY;
 
 		transform.position = newPosition;
-	}
-
-	void TweenCameraYPosition () {
-		float objectToFollowYPositionDifference = player.transform.position.y - previousY;
-
-		iTween.MoveUpdate (this.gameObject, iTween.Hash (
-			"y", transform.position.y + objectToFollowYPositionDifference / 2, 
-			"time", 0.2f, 
-			"delay", 0.1f
-		));
-	}
-
-	// Keep previous following object y
-	void SetPreviousY () {
-		previousY = player.transform.position.y;
 	}
 
 	// Enable vortex & saturate effects
