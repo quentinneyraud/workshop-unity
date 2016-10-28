@@ -16,5 +16,13 @@ abstract public class Application : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag ("player");
 		worldManager = WorldManager.getInstance();
 	}
+
+	protected IEnumerator OnGameEnd () {
+		GameObject.FindGameObjectWithTag ("Endgame").GetComponent<Canvas>().enabled = true;
+
+		yield return new WaitForSeconds (2);
+
+		UnityEngine.Application.LoadLevel (UnityEngine.Application.loadedLevel);
+	}
 }
 

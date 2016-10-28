@@ -190,6 +190,9 @@ public class Hero : Application {
 	void UpdateJewelIndicator () {
 		string name = "jewel-indicator-grayscale-" + jewelCollected;
 		jewel_meter.transform.Find(name).gameObject.SetActive(false);
+		if (jewelCollected == 5) {
+			StartCoroutine (base.OnGameEnd());
+		}
 	}
 
 	bool IsGrounded () {
@@ -200,7 +203,7 @@ public class Hero : Application {
 
 		IsDead = true;
 
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (2f);
 
 		UnityEngine.Application.LoadLevel (UnityEngine.Application.loadedLevel);
 	}
