@@ -15,8 +15,8 @@ public class Portal : Application {
 	
 	}
 
-	void OnTriggerEnter2D(Collider2D col){
-		if (col.gameObject.tag == "player") {
+	void OnTriggerEnter2D(Collider2D col) {
+		if (col.gameObject.tag == "player" && to) {
 			player.transform.position = to.transform.position;
 		}
 	}

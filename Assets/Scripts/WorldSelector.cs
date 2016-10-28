@@ -5,45 +5,40 @@ using Image = UnityEngine.UI.Image;
 public class WorldSelector : Application {
 
 	private Image[] images;
-	private float worldHeight;
-	private float playerStartPositionY;
-	Ray ray;
-	RaycastHit hit;
+	private float worldHeight = 10f;
+	private int currentWorld = -1;
+	private CameraController cameraController;
 
 	// Use this for initialization
 	void Start () {
 		base.Start ();
 		worldHeight = 10f;
-		playerStartPositionY = player.transform.position.y;
 		images = GetComponentsInChildren<Image> ();
+		cameraController = camera.GetComponent<CameraController> ();
+
 		TweenSelectorAlpha (0, 0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		ListenMouseDown ();
-		if (Input.GetMouseButtonUp (0)) {
+		/*if (Input.GetMouseButtonUp (0)) {
 			
 			iTween.MoveTo (player, iTween.Hash(
-				"y", playerStartPositionY - worldHeight,
+				"y", player.transform.position.y + worldHeight * currentWorld,
 				"time", 2f
 			));
+			ToggleCurrentWorld ();
 
 			foreach (Image image in images) {
 				iTween.ScaleTo (image.gameObject, new Vector3(1f, 1f, 1), 1f);
 			}
-		}
-
-		ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if(Physics.Raycast(ray, out hit))
-		{
-			print (hit.collider.name);
-		}
+			cameraController.ToggleUpSideDownEffect ();
+		}*/
 	}
 
-	void OnMouseOver()
-	{
-		print (gameObject.name);
+	void ToggleCurrentWorld () {
+		currentWorld *= -1;
 	}
 
 	void ListenMouseDown () {
@@ -86,7 +81,5 @@ public class WorldSelector : Application {
 		ambiantAudio.pitch = pitch;
 	}
 
-	void OnTriggerEnter2d (Collider2D col) {
-		Debug.Log("enter");
-	}
+
 }

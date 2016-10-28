@@ -11,17 +11,21 @@ public class CameraController : Application {
 	private float maxX = 0f;
 	private float offsetY = 0f;
 	private float previousY = 0f;
-	private Vortex vortexEffect;
-	private ColorCorrectionCurves saturateEffect;
+	private VignetteAndChromaticAberration vignetteEffect;
+	private Grayscale grayscaleEffect;
 
 	void Start () {
 		base.Start ();
 		GetCameraLimitValues ();
 		SetPreviousY ();
 
+
 		offsetY = transform.position.y - player.transform.position.y;
-		vortexEffect = gameObject.GetComponent<Vortex> ();
-		saturateEffect = gameObject.GetComponent<ColorCorrectionCurves> ();
+		if (gameObject.tag == "MainCamera") {
+			vignetteEffect = gameObject.GetComponent<VignetteAndChromaticAberration> ();
+			grayscaleEffect = gameObject.GetComponent<Grayscale> ();
+			ToggleUpSideDownEffect ();
+		}
 	}
 
 	void Update () {
@@ -84,27 +88,27 @@ public class CameraController : Application {
 
 	// Enable vortex & saturate effects
 	// Tween their values
-	public void ToggleDrugEffect () {
-		saturateEffect.enabled = !saturateEffect.enabled;
-		vortexEffect.enabled = !vortexEffect.enabled;
+	public void ToggleUpSideDownEffect () {
+		vignetteEffect.enabled = !vignetteEffect.enabled;
+		grayscaleEffect.enabled = !grayscaleEffect.enabled;
 
-		if (saturateEffect.enabled) {
+		if (vignetteEffect.enabled) {
 			iTween.ValueTo(new GameObject(), iTween.Hash(
 				"name", "vortex_angle_tween",
-				"from", -75,
-				"to", 75,
-				"time", 3,
-				"onupdate", "SetVortexAngle",
+				"from", 0.32f,
+				"to", 0.37f,
+				"time", 0.5,
+				"onupdate", "SetVignetteValue",
 				"easetype", "linear",
 				"looptype", "pingPong"
 			));
 
 			iTween.ValueTo(new GameObject(), iTween.Hash(
 				"name", "saturate_value_tween",
-				"from", 2,
-				"to", 5,
-				"time", 1,
-				"onupdate", "SetSaturationValue",
+				"from", 0.3f,
+				"to", 0.2f,
+				"time", 2,
+				"onupdate", "SetGrayscaleValue",
 				"easetype", "linear",
 				"looptype", "pingPong"
 			));
@@ -114,12 +118,13 @@ public class CameraController : Application {
 		}
 	}
 
-	void SetVortexAngle(float value) {
-		vortexEffect.angle = value;
+	void SetVignetteValue(float value) {
+		Debug.Log ("set vignette effect " + value);
+		vignetteEffect.intensity = value;
 	}
 
-	void SetSaturationValue(float value) {
-		saturateEffect.saturation = value;
+	void SetGrayscaleValue(float value) {
+		grayscaleEffect.rampOffset = value;
 	}
 
 }
