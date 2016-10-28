@@ -11,6 +11,7 @@ public class Hero : Application {
 	private Rigidbody2D rigidBody;
 	private bool doubleJumpAuthorize = true;
 	private int jewelCollected = 0;
+	private AudioSource[] audioSources;
 
 	bool isWalking = false;
 	public bool IsWalking {
@@ -117,6 +118,7 @@ public class Hero : Application {
 		base.Start ();
 		animator = GetComponent<Animator>();
 		rigidBody = GetComponent<Rigidbody2D>();
+		audioSources = GetComponents<AudioSource> ();
 	}
 
 	// Update is called once per frame
@@ -149,6 +151,7 @@ public class Hero : Application {
 			tmpVelocity.x *= (Input.GetKey (KeyCode.LeftShift)) ? run_speed : walk_speed;
 		} else {
 			tmpVelocity.x = 0;
+			stopWalkSound ();
 		}
 
 		rigidBody.velocity = tmpVelocity;
@@ -178,12 +181,15 @@ public class Hero : Application {
 
 	void OnJewelCollision(Collider2D col) {
 		jewelCollected++;
+		startCollectSound ();
 		UpdateJewelIndicator ();
 	}
 
 	void OnMonsterCollision(Collision2D col) {
 		if (col.contacts [0].normal.y < 0.5) {
-			StartCoroutine (OnDead());
+			StartCoroutine (OnDead ());
+		} else {
+			startKillSound ();
 		}
 	}
 
@@ -206,5 +212,27 @@ public class Hero : Application {
 		yield return new WaitForSeconds (2f);
 
 		UnityEngine.Application.LoadLevel (UnityEngine.Application.loadedLevel);
+	}
+
+	// Animation events
+
+	public void startWalkSound() {
+		audioSources [0].Play ();
+	}
+
+	public void stopWalkSound() {
+		audioSources [0].Stop ();
+	}
+
+	public void startJumpSound() {
+		audioSources [1].Play ();
+	}
+
+	public void startCollectSound() {
+		audioSources [2].Play ();
+	}
+
+	public void startKillSound() {
+		audioSources [3].Play ();
 	}
 }

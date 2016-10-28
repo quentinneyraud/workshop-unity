@@ -8,6 +8,7 @@ TagManager:
   - Terrain
   - Monster
   - Jewel
+  - Endgame
   layers:
   - Default
   - TransparentFX
