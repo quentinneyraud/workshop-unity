@@ -19,12 +19,17 @@ namespace Workshop {
 		}
 
 		public WorldManager () {
+			setUp ();
+		}
+
+		public void setUp () {
 			cameraController = Camera.main.GetComponent<CameraController> ();
 			ambiantAudioNormalWorld = Camera.main.GetComponents<AudioSource> ()[0];
 			ambiantAudioUpsideDownWorld = Camera.main.GetComponents<AudioSource> ()[1];
 		}
 
 		public void ToggleWorld () {
+			setUp ();
 			world = (isNormalWorld()) ? 1 : 0;
 			cameraController.ToggleUpSideDownEffect ();
 

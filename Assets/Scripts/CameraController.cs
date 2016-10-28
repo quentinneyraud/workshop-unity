@@ -74,40 +74,5 @@ public class CameraController : Application {
 
 		vignetteEffect.enabled = !vignetteEffect.enabled;
 		grayscaleEffect.enabled = !grayscaleEffect.enabled;
-
-		if (vignetteEffect.enabled) {
-			iTween.ValueTo(new GameObject(), iTween.Hash(
-				"name", "vortex_angle_tween",
-				"from", 0.32f,
-				"to", 0.37f,
-				"time", 0.5,
-				"onupdate", "SetVignetteValue",
-				"easetype", "linear",
-				"looptype", "pingPong"
-			));
-
-			iTween.ValueTo(new GameObject(), iTween.Hash(
-				"name", "saturate_value_tween",
-				"from", 0.3f,
-				"to", 0.2f,
-				"time", 2,
-				"onupdate", "SetGrayscaleValue",
-				"easetype", "linear",
-				"looptype", "pingPong"
-			));
-		} else {
-			iTween.StopByName ("vortex_angle_tween");
-			iTween.StopByName ("saturate_value_tween");
-		}
 	}
-
-	void SetVignetteValue(float value) {
-		Debug.Log ("set vignette effect " + value);
-		vignetteEffect.intensity = value;
-	}
-
-	void SetGrayscaleValue(float value) {
-		grayscaleEffect.rampOffset = value;
-	}
-
 }
